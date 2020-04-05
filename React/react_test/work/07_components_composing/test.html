@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>05_components_composing</title>
+</head>
+<body>
+
+<div id="example"></div>
+
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<script type="text/babel">
+
+  class App extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        toDos: [
+          '曾园艺',
+          '李丽虹',
+          '李洵',
+        ],
+      };
+
+      this.addToDo = this.addToDo.bind(this);
+    }
+
+    addToDo(toDo) {
+      const {toDos} = this.state;
+      toDos.unshift(toDo);
+      this.setState({toDos});
+    }
+
+    render() {
+      const {toDos} = this.state;
+      const length = toDos.length;
+      return (
+          <div>
+            <h1>Simple ToDo List</h1>
+            <Add length={length} addToDo={this.addToDo}/>
+            <List toDos={toDos}/>
+          </div>
+      );
+    }
+  }
+
+  class Add extends React.Component {
+    constructor(props) {
+      super(props);
+
+      this.handleAdd = this.handleAdd.bind(this);
+    }
+
+    handleAdd() {
+      const {value} = this.input;
+      if (!value) return 0;
+      this.props.addToDo(value);
+      this.input.value = '';
+    }
+
+    render() {
+      const {length} = this.props;
+      return (
+          <div>
+            <label>
+              <input type="text" ref={input => this.input = input}/>
+            </label>
+            <input type="button" value={`add${length + 1}`}
+                   onClick={this.handleAdd}/>
+          </div>
+      );
+    }
+  }
+
+  Add.propTypes = {
+    length: PropTypes.number.isRequired,
+    addToDo: PropTypes.func.isRequired,
+  };
+
+  class List extends React.Component {
+    render() {
+      const {toDos} = this.props;
+      return (
+          <div>
+            {
+              toDos.map((toDo, index) => <li key={index}>{toDo}</li>)
+            }
+          </div>
+      );
+    }
+  }
+
+  List.propTypes = {
+    toDos: PropTypes.array.isRequired,
+  };
+
+  ReactDOM.render(<App/>, document.getElementById('example'));
+
+</script>
+</body>
+</html>

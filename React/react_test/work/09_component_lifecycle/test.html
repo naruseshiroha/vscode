@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>10_ComponentLife</title>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<script type="text/babel">
+  /*
+  需求: 自定义组件
+    1. 让指定的文本做显示/隐藏的动画
+    2. 切换时间为2S
+    3. 点击按钮从界面中移除组件界面
+   */
+
+  class Life extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        opacity: 1,
+      };
+      this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+      ReactDOM.unmountComponentAtNode(document.getElementById('example'));
+    }
+
+    componentWillMount() {
+      console.log('componentWillMount');
+      let {opacity} = this.state;
+      this.intervalId = setInterval(() => {
+        opacity -= 0.1;
+        if (opacity < 0) {
+          opacity = 1;
+        }
+        this.setState({opacity});
+      }, 200);
+    }
+
+    componentDidMount() {
+      console.log('componentDidMount');
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+      console.log('componentWillUpdate', nextProps, nextState);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+      console.log('componentDidUpdate', prevProps, prevState);
+    }
+
+    componentWillUnmount() {
+      console.log('componentWillUnmount');
+      clearInterval(this.intervalId);
+    }
+
+    render() {
+      console.log('render');
+      const {opacity} = this.state;
+      return (
+          <div>
+            <h2 style={{opacity}}>{this.props.msg}</h2>
+            <input type="button" value="不爱了" onClick={this.handleClick}/>
+          </div>
+      );
+    }
+  }
+
+  ReactDOM.render(<Life msg="uo ai ni, zyy"/>,
+      document.getElementById('example'));
+
+</script>
+</body>
+</html>

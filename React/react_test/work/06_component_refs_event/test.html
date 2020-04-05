@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>07_component_refs</title>
+</head>
+<body>
+<br>
+<div id="example"></div>
+
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+
+<script type="text/babel">
+  /*
+  需求: 自定义组件, 功能说明如下:
+    1. 界面如果页面所示
+    2. 点击按钮, 提示第一个输入框中的值
+    3. 当第2个输入框失去焦点时, 提示这个输入框中的值
+ */
+
+  class Show extends React.Component {
+
+    constructor(props) {
+      super(props);
+      this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+      // alert(this.refs.content.value)
+      alert(this.input.value);
+    }
+
+    handleBlur(event) {
+      alert(event.target.value);
+    }
+
+    render() {
+      return (
+          <div>
+            <!--<input type="text" ref="content"/>&nbsp;&nbsp;-->
+            <input type="text" ref={input => this.input = input}/>&nbsp;&nbsp;
+            <input type="button" value="button"
+                   onClick={this.handleClick}/>&nbsp;&nbsp;
+            <input type="text" placeholder="失去焦点" onBlur={this.handleBlur}/>
+          </div>
+      );
+    }
+  }
+
+  ReactDOM.render(<Show/>, document.getElementById('example'));
+
+</script>
+</body>
+</html>

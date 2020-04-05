@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>09_form</title>
+</head>
+<body>
+<div id="example"></div>
+
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<script type="text/babel">
+  /*
+  需求: 自定义包含表单的组件
+    1. 界面如下所示
+    2. 输入用户名密码后, 点击登陆提示输入信息
+    3. 不提交表单
+  */
+
+  class Login extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        pwd: '',
+      };
+      this.handleClick = this.handleClick.bind(this);
+      this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(event) {
+      let pwd = event.target.value;
+      this.setState({pwd});
+    }
+
+    handleClick(event) {
+      const name = this.input.value;
+      const {pwd} = this.state;
+      alert(`name:${name},pwd:${pwd}`);
+      event.preventDefault();
+    }
+
+    render() {
+      return (
+          <div>
+            <form action="test.html">
+              <label>
+                用户名:<input type="text" ref={input => this.input = input}/>
+              </label>&nbsp;
+              <label>
+                密码:<input type="password" value={this.state.pwd}
+                          onChange={this.handleChange}/>
+              </label>&nbsp;
+              <input type="submit" value="login" onClick={this.handleClick}/>
+            </form>
+          </div>
+      );
+    }
+  }
+
+  ReactDOM.render(<Login/>, document.getElementById('example'));
+
+</script>
+</body>
+</html>
